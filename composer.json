@@ -1,0 +1,10 @@
+{
+    "name": "juanignaso/php-mcv-core",
+    "authors": [
+        {
+            "name": "JuanIgnaso",
+            "email": "104755375+JuanIgnaso@users.noreply.github.com"
+        }
+    ],
+    "require": {}
+}
