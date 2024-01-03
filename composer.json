@@ -6,5 +6,10 @@
             "email": "104755375+JuanIgnaso@users.noreply.github.com"
         }
     ],
-    "require": {}
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "juanignaso\\phpmvc\\": "./"
+        }
+    }
 }

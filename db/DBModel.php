@@ -1,9 +1,9 @@
 <?php
 
-namespace app\core\db;
+namespace juanignaso\phpmvc\db;
 
-use app\core\Model;
-use app\core\Application;
+use juanignaso\phpmvc\Model;
+use juanignaso\phpmvc\Application;
 
 abstract class DBmodel extends Model
 {

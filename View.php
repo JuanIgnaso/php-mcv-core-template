@@ -1,6 +1,6 @@
 <?php
 
-namespace app\core;
+namespace juanignaso\phpmvc;
 
 class View
 {
@@ -36,7 +36,7 @@ class View
         $layout = Application::$app->layout;
         #renderiza el layout
         if (Application::$app->controller) {
-            $layout = Application::$app->controller->layout; // <- Da ERROR cuando se carga una ruta que no existe: Uncaught Error: Typed property app\core\Application::$controller must not be accessed before initialization
+            $layout = Application::$app->controller->layout; // <- Da ERROR cuando se carga una ruta que no existe: Uncaught Error: Typed property juanignaso\phpmvc\Application::$controller must not be accessed before initialization
         }
 
         ob_start();

@@ -1,13 +1,13 @@
 <?php
-namespace app\core;
+namespace juanignaso\phpmvc;
 
-use app\core\db\DataBase;
-use app\core\db\DBmodel;
+use juanignaso\phpmvc\db\DataBase;
+use juanignaso\phpmvc\db\DBmodel;
 
 /**
  * Class Application
  * 
- * @package app\core
+ * @package juanignaso\phpmvc
  */
 class Application
 {
