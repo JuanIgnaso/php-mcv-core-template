@@ -35,6 +35,11 @@ class Controller
         $this->middlewares[] = $middleware;
     }
 
+    public function loggedMiddleware(BaseMiddleware $middleware)
+    {
+        $this->middlewares[] = $middleware;
+    }
+
     public function getMiddleWares(): array
     {
         return $this->middlewares;

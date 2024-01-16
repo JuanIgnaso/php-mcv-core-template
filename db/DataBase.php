@@ -19,13 +19,17 @@ class DataBase
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
 
+    /**
+     * Busca dentro del directorio de '/migrations' y aplica las migraciones pendientes a la base de datos
+     * configurada en la aplicación.
+     */
     public function applyMigrations()
     {
         $this->createMigrationsTable();
         $appliedMigrations = $this->getAppliedMigrations();
         $newMigrations = [];
-        $files = scandir(Application::$ROOT_DIR . '/migrations');
-        $toApplyMigrations = array_diff($files, $appliedMigrations);
+        $files = scandir(Application::$ROOT_DIR . '/migrations'); //escanea el directorio en busca del archivo
+        $toApplyMigrations = array_diff($files, $appliedMigrations); //coge solo los que están sin aplicar
         foreach ($toApplyMigrations as $migration) {
             if ($migration === '.' || $migration === '..') {
                 continue;
@@ -35,16 +39,17 @@ class DataBase
             require_once Application::$ROOT_DIR . '/migrations/' . $migration;
             $className = pathinfo($migration, PATHINFO_FILENAME);
             $instance = new $className();
-            $this->log("Applying migration $migration");
+            $this->log("Aplicando Migración $migration");
             $instance->up();
-            $this->log("Applied migration $migration");
+            $this->log("Migración $migration ha sido aplicada");
             $newMigrations[] = $migration;
         }
 
         if (!empty($newMigrations)) {
+            //Inserta un nuevo registro dentro de la tabla migraciones si hay alguna migración nueva a aplicar.
             $this->saveMigrations($newMigrations);
         } else {
-            $this->log('All migrations are applied');
+            $this->log('Todas las Migraciones han sido aplicadas');
         }
     }
 
