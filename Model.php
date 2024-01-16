@@ -12,6 +12,7 @@ abstract class Model
     public const RULE_REGEX = 'regex';
     public const RULE_UNIQUE = 'unique';
     public const RULE_CHECKED = 'checked';
+    public const RULE_WHITE_SPACE = 'white space';
     public array $errors = [];
 
     public function loadData($data)
@@ -64,6 +65,9 @@ abstract class Model
                 }
                 if ($ruleName === self::RULE_REQUIRED && !$value) {
                     $this->addErrorForRule($attribute, self::RULE_REQUIRED);
+                }
+                if ($ruleName === self::RULE_WHITE_SPACE && ctype_space($value)) {
+                    $this->addErrorForRule($attribute, self::RULE_WHITE_SPACE);
                 }
                 if ($ruleName === self::RULE_EMAIL && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
                     $this->addErrorForRule($attribute, self::RULE_EMAIL);
@@ -133,14 +137,15 @@ abstract class Model
     public function errorMessages(): array
     { //Array con los mensajes de error
         return [
-            self::RULE_REQUIRED => 'This field is required',
-            self::RULE_EMAIL => 'This must be a valid email',
-            self::RULE_MIN => 'The min length of this field must be {min}',
-            self::RULE_MAX => 'The max length of this field must be {max}',
-            self::RULE_MATCH => 'This field must be the same as <strong>{match}</strong>',
-            self::RULE_REGEX => 'This field doesnt follow the correct pattern: {text}',
-            self::RULE_UNIQUE => 'Record with this <strong>{field}</strong> already exists',
-            self::RULE_CHECKED => 'This option must be checked',
+            self::RULE_REQUIRED => 'Este campo es obligatorio',
+            self::RULE_EMAIL => 'Tienes que escribir un email válido',
+            self::RULE_MIN => 'El largo mínimo debe de ser de {min}',
+            self::RULE_MAX => 'El largo máximo debe de ser de {max}',
+            self::RULE_MATCH => 'Este campo debe de ser igual a <strong>{match}</strong>',
+            self::RULE_REGEX => 'Este campo no cumple con el patrón requerido: {text}',
+            self::RULE_UNIQUE => 'El valor escrito en <strong>{field}</strong> ya existe',
+            self::RULE_CHECKED => 'Debes de marcar esta opción',
+            self::RULE_WHITE_SPACE => 'No se aceptan cadenas vacías',
         ];
     }
 

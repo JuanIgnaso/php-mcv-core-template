@@ -27,9 +27,36 @@ abstract class DBmodel extends Model
         return true;
     }
 
+    public function delete(): bool
+    {
+        $tableName = $this->tableName();
+        $attributes = $this->attributes();
+        $sql = implode(' AND ', array_map(fn($attr) => "$attr = :$attr", $attributes));
+        $statement = self::prepare("DELETE FROM $tableName WHERE $sql");
+        //bind values
+        foreach ($attributes as $attribute) {
+            $statement->bindValue(":$attribute", $this->{$attribute});
+        }
+        $statement->execute();
+
+        return $statement->rowCount() != 0;
+    }
+
+    public function getAll()
+    {
+        $tableName = $this->tableName();
+        return self::query("SELECT * FROM $tableName ORDER BY 1")->fetchAll(\PDO::FETCH_ASSOC);
+
+    }
+
     public static function prepare($sql)
     {
         return Application::$app->db->pdo->prepare($sql);
+    }
+
+    public static function query($sql)
+    {
+        return Application::$app->db->pdo->query($sql);
     }
 
     public function findOne($where) //[email => 'email', username => 'name']
