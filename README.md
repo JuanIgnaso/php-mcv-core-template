@@ -13,3 +13,4 @@ template para hacer pequeños proyectos de MCV con una base de datos.
 
 ## Actualizaciones
 04 Feb - Lanzada versión 1.0.3
+04 Feb - Lanzada versión 1.0.4(cambios en comentarios solo)
