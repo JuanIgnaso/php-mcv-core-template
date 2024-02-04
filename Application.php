@@ -42,7 +42,7 @@ class Application
     {
         self::$ROOT_DIR = $rootPath;
         self::$app = $this;
-        $this->userClass = $config['userClass'];
+        $this->userClass = $config['userClass']; //mirar en index.php ahí es donde crearás el array config y especificarás la clase de usuario a usar.
         $this->request = new Request();
         $this->response = new Response();
         $this->session = new Session();
@@ -93,7 +93,7 @@ class Application
     }
 
     /**
-     * Borrar la sesión actual dentro de aplicación
+     * Borrar la sesión actual dentro de aplicación, borra todos los tokens asociados con el usuario
      */
     public function logout()
     {
@@ -128,6 +128,10 @@ class Application
         }
     }
 
+    /**
+     * Comprueba si el usuario tiene sesión iniciada
+     * @return bool
+     */
     public function isUserLoggedIn(): bool
     {
         //Comprobar que el usuario tiene sesion iniciada
@@ -148,7 +152,7 @@ class Application
     }
 
     /**
-     * Determinar si el usuario está o no logueado en la web
+     * Determinar si el usuario está o no logueado en la aplicación
      */
     public static function isGuest()
     {

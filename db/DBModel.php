@@ -7,12 +7,19 @@ use juanignaso\phpmvc\Application;
 
 abstract class DBmodel extends Model
 {
+    /**
+     * Devuelve el nombre de la tabla que va a usar el modelo
+     * @return string
+     */
     abstract public function tableName(): string;
 
     //Debería traer todos los nombre de las columnas de la tabla
     abstract public function attributes(): array;
     abstract public function primaryKey(): string;
 
+    /**
+     * Guarda un registro dentro de la tabla del modelo
+     */
     public function save()
     {
         $tableName = $this->tableName();
@@ -43,6 +50,10 @@ abstract class DBmodel extends Model
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Borra registro dentro de la tabla especificada en el modelo, devolviendo true o false dependiendo si ha logrado hacer la operación
+     * @return bool
+     */
     public function delete(): bool
     {
         $tableName = $this->tableName();
@@ -58,6 +69,9 @@ abstract class DBmodel extends Model
         return $statement->rowCount() != 0;
     }
 
+    /**
+     * Recoge todos los datos de la tabla especificada en el modelo
+     */
     public function getAll()
     {
         $tableName = $this->tableName();
@@ -75,7 +89,11 @@ abstract class DBmodel extends Model
         return Application::$app->db->pdo->query($sql);
     }
 
-    public function findOne($where) //[email => 'email', username => 'name']
+    /**
+     * Encuentra una ocurrencia dentro de la tabla definida dentro del modelo
+     * @param array $where
+     */
+    public function findOne($where) //Ej: [email => 'email', username => 'name']
     {
         $tableName = static::tableName();
         $attributes = array_keys($where);

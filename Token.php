@@ -7,7 +7,7 @@ use Application;
 
 class Token
 {
-    const TABLE_NAME = 'usuariosToken';
+    const TABLE_NAME = 'usuariosToken'; //escribe aquí el nombre de la tabla que almacene los tokens
 
 
     /**
@@ -88,6 +88,7 @@ class Token
     /**
      * 
      * Borrar token de usuario, esta función borra todos los tokens asociado con el usuario
+     * @param int $id_usuario
      */
     function borrarTokensUsuario(int $id_usuario): bool
     {
@@ -100,6 +101,7 @@ class Token
 
     /**
      * Encontrar usuario por Token, devuelve id y email
+     * @param string $token
      */
     function encontrarUsrPorToken(string $token)
     {
@@ -124,10 +126,10 @@ class Token
     }
 
     /**
-     * Comprueba que el token recibido es valido
-     * 
+     * Comprueba que el token recibido por parámetro es o no valido
+     * @param string $token
      */
-    function isTokenValido($token)
+    function isTokenValido(string $token)
     {
         [$selector, $validator] = $this->parsear_token($token);
 
@@ -139,11 +141,19 @@ class Token
     }
 
 
-    public static function prepare($sql)
+    /**
+     * Prepara una prepared statement pasada como parámetro
+     * @param string $sql
+     */
+    public static function prepare(string $sql)
     {
         return Application::$app->db->pdo->prepare($sql);
     }
 
+    /**
+     * Ejecuta una query pasada como parámetro
+     * @param string $sql
+     */
     public static function query($sql)
     {
         return Application::$app->db->pdo->query($sql);
