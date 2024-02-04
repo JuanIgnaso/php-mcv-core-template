@@ -48,19 +48,19 @@ class Request
     public function getBody()
     {
         #esto devería devolver todos los datos.
-        $body = [];
         if ($this->method() === 'get') {
-            foreach ($_GET as $key => $value) {
-                $body[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
-            }
+            return filter_var_array($_GET, FILTER_SANITIZE_SPECIAL_CHARS);
+            // foreach ($_GET as $key => $value) {
+            //         $body[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+            // }
         }
         if ($this->method() === 'post') {
-            foreach ($_POST as $key => $value) {
-                $body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
-            }
-        }
+            return filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        return $body;
+            // foreach ($_POST as $key => $value) {
+            //     $body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+            //}
+        }
     }
 
 }

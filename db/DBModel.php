@@ -27,6 +27,22 @@ abstract class DBmodel extends Model
         return true;
     }
 
+    /**
+     * Devuelve una lista de los valores de un atributo que coincidan
+     * con el valor cargado en ese atributo(el atributo en cuestión debe de estar previamente
+     * cargado en el modelo mediante $modelo->loadData()).
+     * 
+     * @param $attr
+     */
+    public function getAttrList($attr)
+    {
+        $tableName = $this->tableName();
+        $statement = self::prepare("SELECT $attr  FROM  $tableName WHERE $attr LIKE :search ORDER BY 1");
+        $statement->bindValue(":search", "%" . $this->{$attr} . "%");
+        $statement->execute();
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     public function delete(): bool
     {
         $tableName = $this->tableName();
@@ -46,8 +62,8 @@ abstract class DBmodel extends Model
     {
         $tableName = $this->tableName();
         return self::query("SELECT * FROM $tableName ORDER BY 1")->fetchAll(\PDO::FETCH_ASSOC);
-
     }
+
 
     public static function prepare($sql)
     {

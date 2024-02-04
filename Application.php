@@ -35,6 +35,8 @@ class Application
 
     public View $view;
 
+    public Token $Token;
+
 
     public function __construct($rootPath, array $config)
     {
@@ -47,6 +49,9 @@ class Application
         $this->router = new Router($this->request, $this->response);
         $this->view = new View();
         $this->db = new DataBase($config['db']);
+        $this->Token = new Token();
+
+        $this->recoverUserSesion(); //Recupera la sesión si la cookie 'remember me' existe en el navegador
 
         //Fetch user between page navigation, to access it in any point of the aplication
         $primaryValue = $this->session->get('user');
@@ -78,17 +83,6 @@ class Application
         }
     }
 
-    // public function getController(): Controller
-    // {
-    //     return $this->controller;
-    // }
-
-
-    // public function setController(Controller $controller): void
-    // {
-    //     $this->controller = $controller;
-    // }
-
     public function login(UserModel $user)
     {
         $this->user = $user;
@@ -103,8 +97,54 @@ class Application
      */
     public function logout()
     {
-        $this->user = NULL;
-        $this->session->remove('user');
+        if ($this->isUserLoggedIn()) {
+            //borrar el token del usuario
+            $this->Token->borrarTokensUsuario($this->user->id);
+            $this->user = NULL;
+            $this->session->remove('user');
+            setcookie('remember_me', '', time() - 3600);
+        }
+    }
+
+
+    /**
+     * Recupera la sesión del usuario cada vez que se abra el navegador
+     * o inicie el servidor, si este ha marcado la casilla de 'remember_me'
+     */
+    public function recoverUserSesion()
+    {
+        #se comprueba que existe la cookie
+        if (isset($_COOKIE['remember_me'])) {
+            $usuario = $this->Token->encontrarUsrPorToken($_COOKIE['remember_me']);
+            /*
+            si el resultado de 'encontrarUsrPorToken()' es distinto de falso, osea que el usuario 
+            tiene token, se inicia sesión.
+            */
+            if ($usuario != false) {
+                $userModel = new Usuario();
+                $usuario = $userModel->findOne(['id' => $usuario['id']]);
+                $this->login($usuario);
+            }
+        }
+    }
+
+    public function isUserLoggedIn(): bool
+    {
+        //Comprobar que el usuario tiene sesion iniciada
+        if (self::$app->user != null) {
+            return true;
+        }
+
+        //Comprobar el token de remember me
+        $token = filter_input(INPUT_COOKIE, 'remember_me', FILTER_SANITIZE_STRING);
+
+        if ($token && self::$app->Token->isTokenValido($token)) {
+            $usuario = self::$app->Token->encontrarUsrPorToken($token);
+            if ($usuario) {
+                return $this->login($usuario);
+            }
+        }
+        return false;
     }
 
     /**
