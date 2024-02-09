@@ -5,7 +5,7 @@ namespace juanignaso\phpmvc\db;
 use juanignaso\phpmvc\Model;
 use juanignaso\phpmvc\Application;
 
-abstract class DBmodel extends Model
+abstract class DBModel extends Model
 {
     /**
      * Devuelve el nombre de la tabla que va a usar el modelo
